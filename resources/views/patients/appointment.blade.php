@@ -1,9 +1,9 @@
 <x-app-layout>
-    <x-slot name="header">
+    {{-- <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{ __('Appointment') }}
         </h2>
-    </x-slot>
+    </x-slot> --}}
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -57,7 +57,7 @@
     </div>
 
     <script>
-        // Close the notification modal
+        
         function closeModal() {
             const modal = document.getElementById('notification-modal');
             if (modal) {
@@ -67,7 +67,7 @@
     </script>
 
     <style>
-        /* Notification Modal Styles */
+        
         .fixed {
             position: fixed;
         }
@@ -138,7 +138,7 @@
         .hover\:text-gray-700:hover {
             color: #4a5568;
         }
-        /* Label styling */
+        
         .label {
             display: block;
             font-size: 1rem;
@@ -147,7 +147,7 @@
             margin-bottom: 0.5rem;
         }
 
-        /* Textarea styling */
+        
         .textarea {
             display: block;
             width: 100%;
@@ -162,14 +162,14 @@
             min-height: 100px;
         }
 
-        /* Textarea focus effect */
+        
         .textarea:focus {
             outline: none;
             border-color: #4CAF50;
             box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
         }
 
-        /* Button styling */
+        
         .btn {
             display: inline-flex;
             align-items: center;
@@ -185,18 +185,18 @@
             transition: background-color 0.3s ease;
         }
 
-        /* Button hover effect */
+        
         .btn:hover {
             background-color: #2b6cb0;
         }
 
-        /* Container padding */
+        
         .py-12 {
             padding-top: 3rem;
             padding-bottom: 3rem;
         }
 
-        /* Card container */
+        
         .bg-white {
             background-color: #ffffff;
         }
@@ -213,7 +213,7 @@
             border-radius: 0.5rem;
         }
 
-        /* Spacing for card padding */
+        
         .p-6 {
             padding: 1.5rem;
         }
@@ -222,7 +222,7 @@
             color: #1a202c;
         }
 
-        /* Heading text */
+        
         h2 {
             font-size: 1.25rem;
             font-weight: 700;

@@ -22,12 +22,7 @@ class AdminController extends BaseController
 
         $doctors = collect(DB::select("SELECT * FROM doctors
         "));
-        // $doctors = collect(DB::select("SELECT d.name, d.specialty ,COUNT(a.dop) as 'total'
-        // FROM appointment a
-        // JOIN doctors d ON a.doctorsid=d.id
-        // WHERE a.status = 'asigned'
-        // GROUP BY d.name, d.specialty
-        // "));
+        
         return view('admin.appointments', [
             'appointments' => $appointment,
             'doctors' => $doctors
@@ -71,7 +66,7 @@ class AdminController extends BaseController
     {
         Log::debug('Received request data:', $request->all());
 
-        // Validate the incoming request
+        
         $validated = $request->validate([
             'doctor_id' => 'required|exists:doctors,id',
             'name' => 'required|string|max:255',
@@ -79,10 +74,10 @@ class AdminController extends BaseController
             'status' => 'required|in:active,inactive',
         ]);
 
-        // Log the validated data
+        
         Log::debug('Validated data:', $validated);
 
-        // Perform the update using DB facade
+        
         $updated = DB::table('doctors')
             ->where('id', $validated['doctor_id'])
             ->update([
@@ -91,10 +86,10 @@ class AdminController extends BaseController
                 'status' => $validated['status'],
             ]);
 
-        // Log the result of the update
+            
         Log::debug('Update result:', ['updated' => $updated]);
 
-        // Return a JSON response
+        
         if ($updated) {
             return response()->json(['message' => 'Doctor updated successfully']);
         } else {
@@ -115,7 +110,7 @@ class AdminController extends BaseController
     }
     public function users()
     {
-        $users = collect(DB::select("SELECT * FROM users"));
+        $users = collect(DB::select("SELECT * FROM users WHERE role = 'Patient'"));
 
         return view('admin.users', [
             'users' => $users

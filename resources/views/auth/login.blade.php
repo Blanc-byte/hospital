@@ -3,7 +3,7 @@
         
         body {
             background-color: #B2F5E1;
-            /* background-image: url("{{ asset('images/k.gif') }}");   */
+            background-image: url("{{ asset('images/hos.webp') }}");  
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;

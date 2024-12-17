@@ -1,11 +1,11 @@
 <x-app-layout>
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <x-slot name="header">
+    {{-- <x-slot name="header">
         <h2 class="header-title">
             {{ __('Doctors') }}
         </h2>
-    </x-slot>
+    </x-slot> --}}
 
     <style>
         .modal-overlay {
@@ -15,14 +15,14 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(110, 110, 110, 0.7); /* Darker overlay */
+            background: rgba(110, 110, 110, 0.7); 
             justify-content: center;
             align-items: center;
             z-index: 50;
         }
 
         .modal-content {
-            background: #ffffff; /* Dark modal content */
+            background: #ffffff; 
             border-radius: 0.5rem;
             padding: 2rem;
             width: 90%;
@@ -41,14 +41,14 @@
         }
 
         .table-container th {
-            background-color: #f4f4f4;
+            background-color: #B2F5E1;
             font-weight: bold;
         }
 
         .table-container td.concern-cell {
             word-wrap: break-word;
             white-space: pre-wrap;
-            width: 40%; /* Adjusted for more space */
+            width: 40%; 
         }
 
         .assign-button {
@@ -144,59 +144,59 @@
 <script>
     let appID = null;
 
-    // Function to open the modal and populate it with data
-function openEditDoctorModal(doctorId, name, specialty, status) {
-    appID = doctorId;
-    // Set the form fields with the current doctor's data
-    document.getElementById('doctor-id').value = doctorId;
-    document.getElementById('doctor-name').value = name;
-    document.getElementById('doctor-specialty').value = specialty;
-    document.getElementById('doctor-status').value = status;
+    
+    function openEditDoctorModal(doctorId, name, specialty, status) {
+        appID = doctorId;
+        
+        document.getElementById('doctor-id').value = doctorId;
+        document.getElementById('doctor-name').value = name;
+        document.getElementById('doctor-specialty').value = specialty;
+        document.getElementById('doctor-status').value = status;
 
-    // Show the modal
-    document.getElementById('edit-doctor-modal').classList.remove('hidden');
-    document.getElementById('edit-doctor-modal').style.display = 'flex';
-}
+        
+        document.getElementById('edit-doctor-modal').classList.remove('hidden');
+        document.getElementById('edit-doctor-modal').style.display = 'flex';
+    }
 
-// Function to close the modal
-function closeEditDoctorModal() {
-    document.getElementById('edit-doctor-modal').classList.add('hidden');
-    document.getElementById('edit-doctor-modal').style.display = 'none';
-}
 
-function closeConfirmationModal() {
-    const doctorName = document.getElementById('doctor-name').value;
-    const doctorSpecialty = document.getElementById('doctor-specialty').value;
-    const doctorStatus = document.getElementById('doctor-status').value;
+    function closeEditDoctorModal() {
+        document.getElementById('edit-doctor-modal').classList.add('hidden');
+        document.getElementById('edit-doctor-modal').style.display = 'none';
+    }
 
-    // You can log the values for debugging or use them as needed
-    console.log('Doctor ID:', appID);
-    console.log('Doctor Name:', doctorName);
-    console.log('Specialty:', doctorSpecialty);
-    console.log('Status:', doctorStatus);
+    function closeConfirmationModal() {
+        const doctorName = document.getElementById('doctor-name').value;
+        const doctorSpecialty = document.getElementById('doctor-specialty').value;
+        const doctorStatus = document.getElementById('doctor-status').value;
 
-    fetch(`/update-doctor`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-        },
-        body: JSON.stringify({
-            doctor_id: appID,
-            doctor_name: doctorName,
-            doctor_specialty: doctorSpecialty,
-            doctor_status: doctorStatus
+        
+        console.log('Doctor ID:', appID);
+        console.log('Doctor Name:', doctorName);
+        console.log('Specialty:', doctorSpecialty);
+        console.log('Status:', doctorStatus);
+
+        fetch(`/update-doctor`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            },
+            body: JSON.stringify({
+                doctor_id: appID,
+                doctor_name: doctorName,
+                doctor_specialty: doctorSpecialty,
+                doctor_status: doctorStatus
+            })
         })
-    })
-    .then(response => response.json())
-    .then(data => {
-        window.location.reload();
-        console.log(data);
-        closeEditDoctorModal();
-    })
-    .catch(error => {
-        console.error('Error:', error);
-    });
-}
+        .then(response => response.json())
+        .then(data => {
+            window.location.reload();
+            console.log(data);
+            closeEditDoctorModal();
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
 
 </script>

@@ -1,9 +1,9 @@
 <x-app-layout>
-    <x-slot name="header">
+    {{-- <x-slot name="header">
         <h2 class="header-title">
             {{ __('History') }}
         </h2>
-    </x-slot>
+    </x-slot> --}}
 
     <style>
         .modal-overlay {
@@ -13,14 +13,14 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(110, 110, 110, 0.7); /* Darker overlay */
+            background: rgba(110, 110, 110, 0.7); 
             justify-content: center;
             align-items: center;
             z-index: 50;
         }
 
         .modal-content {
-            background: #ffffff; /* Dark modal content */
+            background: #ffffff; 
             border-radius: 0.5rem;
             padding: 2rem;
             width: 90%;
@@ -39,14 +39,14 @@
         }
 
         .table-container th {
-            background-color: #f4f4f4;
+            background-color: #B2F5E1;
             font-weight: bold;
         }
 
         .table-container td.concern-cell {
             word-wrap: break-word;
             white-space: pre-wrap;
-            width: 40%; /* Adjusted for more space */
+            width: 40%; 
         }
 
         .assign-button {

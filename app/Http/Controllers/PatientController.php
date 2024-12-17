@@ -19,87 +19,65 @@ class PatientController extends BaseController
     }
     public function store(Request $request)
     {
-        // Validate the request
         $request->validate([
             'concern' => 'required|string|max:255',
         ]);
 
-        // Get the authenticated user's ID
         $patientId = auth()->id();
 
-        // Get today's date in the format yyyy-mm-dd
         $today = date('Y-m-d');
 
-        // Check if the patient already has a pending appointment for today
         $pendingCount = DB::table('appointment')
             ->where('patientid', $patientId)
             ->where('status', 'pending')
-            ->whereDate('created_at', $today) // Use whereDate to match only the date part of created_at
             ->count();
 
         $pendingCount2 = DB::table('appointment')
             ->where('patientid', $patientId)
             ->where('status', 'assigned')
-            ->whereDate('created_at', $today) // Use whereDate to match only the date part of created_at
+            ->whereDate('created_at', $today) 
             ->count();
 
-        // Proceed only if no pending appointments exist for today
         if ($pendingCount < 1) {
             if ($pendingCount2 < 1) {
-                // Insert the data using raw query
                 DB::table('appointment')->insert([
-                    'patientid' => $patientId,  // Assuming the user is a patient
+                    'patientid' => $patientId, 
                     'concern' => $request->concern,
-                    'created_at' => now(),     // Automatically set the created_at timestamp
+                    'created_at' => now(),    
                 ]);
                 return redirect()->back()->with('success', 'Appointment added successfully!');
             }else{
                 return redirect()->back()->with('error', 'You can only request one appointment per day.');
             }
-            
-
-            // Redirect to appointment index with a success message
-            //return redirect()->back()->with('success', 'Appointment added successfully!');
         } else {
-            // Redirect back with an error message if a pending appointment exists for today
-            return redirect()->back()->with('error', 'You can only request one appointment per day.');
+            return redirect()->back()->with('error', 'You can only request one appointment.');
         }
     }
 
 
     public function viewAppointment()
     {
-        $userId = auth()->id(); // Get the logged-in user's ID
-        $today = date('Y-m-d'); // Get today's date in the format yyyy-mm-dd
+        $userId = auth()->id(); 
+        $today = date('Y-m-d'); 
 
-        // Retrieve appointments for the logged-in user where 'status' is 'pending' and 'dop' matches today's date
         $appointment = collect(DB::select("
             SELECT * 
             FROM appointment 
             WHERE status = 'pending'
-            AND patientid = ?
+            AND patientid = ? 
         ", [$userId]));
-    // Raw SQL Query
-    // $appointment = collect(DB::select("
-    //     SELECT d.id AS doctor_id, d.name AS doctor_name, a.doctorsid, a.dop, a.status, a.concern
-    //     FROM appointment a
-    //     JOIN doctors d ON a.doctorsid = d.id
-    //     WHERE a.patientid = ?
-    // ", [$userId]));
-
+        
         return view('patients.viewAppointment', ['appointments' => $appointment]);
     }
     public function viewAppointmentApproved()
     {
-        $userId = auth()->id(); // Get the logged-in user's ID
+        $userId = auth()->id(); 
         
-        //$appointment = collect(DB::select("SELECT * FROM appointment where status != 'pending'"));
-        // Raw SQL Query
         $appointment = collect(DB::select("
             SELECT d.id AS doctor_id, d.name AS doctor_name, a.doctorsid, a.dop, a.status, a.concern
             FROM appointment a
             JOIN doctors d ON a.doctorsid = d.id
-            WHERE a.status != 'pending'"));
+            WHERE a.status != 'pending' ORDER BY dop DESC"));
 
         return view('patients.approved', ['appointments' => $appointment]);
     }

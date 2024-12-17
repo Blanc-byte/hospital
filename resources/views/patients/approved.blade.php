@@ -1,9 +1,9 @@
 <x-app-layout>
-    <x-slot name="header">
+    {{-- <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{ __('Approved') }}
         </h2>
-    </x-slot>
+    </x-slot> --}}
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -15,7 +15,7 @@
                         <p>No appointment found.</p>
                     @else
                         @foreach($appointments as $appointment)
-                            <div class="bg-gray-100 p-4 rounded-lg shadow mb-2">
+                            <div class="bg-gray-100 p-4 rounded-lg shadow mb-2 mb-4">
                                 <p><strong>Concern:</strong> {{ $appointment->concern }}</p>
                                 <p><strong>Doctor:</strong> {{ $appointment->doctor_name }}</p>
                                 <p><strong>Status:</strong> {{ ucfirst($appointment->status) }}</p>
