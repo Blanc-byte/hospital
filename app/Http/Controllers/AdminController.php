@@ -102,7 +102,7 @@ class AdminController extends BaseController
         FROM appointment a
         JOIN users u ON a.patientid = u.id
         JOIN doctors d ON a.doctorsid = d.id
-        WHERE a.status = 'assigned'"));
+        WHERE a.status = 'assigned' ORDER BY a.dop DESC"));
 
         return view('admin.history', [
             'history' => $history
@@ -115,5 +115,22 @@ class AdminController extends BaseController
         return view('admin.users', [
             'users' => $users
         ]);
+    }
+    public function store(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'specialty' => 'required|string|max:255',
+            'status' => 'required|string|in:available,unavailable',
+        ]);
+
+        // Insert a new doctor record using Query Builder
+        DB::table('doctors')->insert([
+            'name' => $request->input('name'),
+            'specialty' => $request->input('specialty'),
+            'status' => $request->input('status'),
+        ]);
+
+        return redirect()->back()->with(['success' => true, 'message' => 'Doctor added successfully']);
     }
 }

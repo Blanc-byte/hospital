@@ -23,10 +23,9 @@ Route::middleware(['auth', 'isAdmin'])->group(function () {
     Route::post('/assign-doctor', [AdminController::class, 'assignDoctor']);
     Route::post('/update-doctor', [AdminController::class, 'updateDoctor']);
     Route::post('/doctors/update', [AdminController::class, 'update']);
-
+    Route::post('/add-doctor', [AdminController::class, 'store'])->name('doctor.add');
 
 });
-
 
 Route::middleware(['auth', 'isPatient'])->group(function () {
     Route::get('/patient/appointment', [PatientController::class, 'index'])->name('patient.appointment');

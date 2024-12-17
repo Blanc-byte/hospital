@@ -28,11 +28,12 @@
                 box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
             }
 
-            /* Content area styles */
+            
             .content {
-                margin-left: 200px; /* Adjust to match sidebar width */
+                margin-left: 200px;
                 padding: 16px;
                 min-height: 100vh;
+                background-color: #1b5846;
             }
         </style>
     </head>
