@@ -121,6 +121,22 @@
             background-color: #2779bd; 
         }
 
+        .assign-button4 {
+            background-color: #ee2d2d; 
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border: none;
+            border-radius: 5px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 5px;
+        }
+
+        .assign-button4:hover {
+            background-color: #bd0802; 
+        }
+
         .assign-button.cancel {
             background-color: #e3342f;
         }
@@ -138,6 +154,24 @@
                 opacity: 1;
                 transform: translateY(0);
             }
+        }
+        .modal-buttons .button{
+            background-color: #3490dc; 
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border: none;
+            border-radius: 5px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        #confirmation-modal{
+            background-color: rgba(49, 49, 49, 0.534);
+        }
+        .confirmation-modal-content{
+            background-color: rgb(255, 255, 255);
+            border-radius: 10px;
+            padding: 1.5rem 1.5rem;
         }
     </style>
 
@@ -172,6 +206,13 @@
                                         <td class="concern-cell">{{ $doctor->status }}</td>
                                         <td>
                                             <button class="assign-button" onclick="openEditDoctorModal('{{ $doctor->id }}', '{{ $doctor->name }}', '{{ $doctor->specialty }}', '{{ $doctor->status }}')">Edit</button>
+                                            <form action="{{ route('doctor.destroy', $doctor->id) }}" method="POST" id="delete-form-{{ $doctor->id }}">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button class="assign-button4 ab" onclick="event.preventDefault(); openConfirmationModal2(document.getElementById('delete-form-{{ $doctor->id }}'))">
+                                                    DELETE
+                                                </button>
+                                            </form>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -182,6 +223,17 @@
             </div>
         </div>
     </div>
+
+    <!-- Confirmation Modal -->
+<div id="confirmation-modal" class="modal-overlay hidden">
+    <div class="confirmation-modal-content">
+        <h2 class="text-xl font-bold mb-4">Are you sure you want to remove this Doctor?</h2>
+        <div class="modal-buttons">
+            <button type="button" onclick="closeConfirmationModal2()" class="button button-red">Cancel</button>
+            <button id="confirm-delete-btn" type="button" class="button button-blue">Confirm</button>
+        </div>
+    </div>
+</div>
     <!-- Edit Doctor Modal -->
 <div id="edit-doctor-modal" class="modal-overlay hidden">
     <div class="modal-content">
@@ -242,7 +294,26 @@
 </div>
 </x-app-layout>
 <script>
-    
+    // Open the confirmation modal and set the form for deletion
+    function openConfirmationModal2(form) {
+        deleteForm = form;
+        document.getElementById('confirmation-modal').classList.remove('hidden');
+        document.getElementById('confirmation-modal').style.display = 'flex';
+    }
+
+    // Close the confirmation modal
+    function closeConfirmationModal2() {
+        document.getElementById('confirmation-modal').classList.add('hidden');
+        document.getElementById('confirmation-modal').style.display = 'none';
+    }
+
+    // Confirm deletion
+    document.getElementById('confirm-delete-btn').onclick = function() {
+        if (deleteForm) {
+            deleteForm.submit();
+        }
+        closeConfirmationModal();
+    }
     function openAddDoctorModal() {
         document.getElementById('add-doctor-modal').classList.remove('hidden');
         document.getElementById('add-doctor-modal').style.display = 'flex';

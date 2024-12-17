@@ -133,4 +133,10 @@ class AdminController extends BaseController
 
         return redirect()->back()->with(['success' => true, 'message' => 'Doctor added successfully']);
     }
+    public function destroy($doctor)
+    {
+        $result = DB::table('doctors')->where('id', $doctor)->delete();
+
+        return redirect()->back()->with('success', 'Student deleted successfully');
+    }
 }

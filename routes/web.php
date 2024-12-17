@@ -24,6 +24,7 @@ Route::middleware(['auth', 'isAdmin'])->group(function () {
     Route::post('/update-doctor', [AdminController::class, 'updateDoctor']);
     Route::post('/doctors/update', [AdminController::class, 'update']);
     Route::post('/add-doctor', [AdminController::class, 'store'])->name('doctor.add');
+Route::delete('/doctor/{doctor}', [AdminController::class, 'destroy'])->name('doctor.destroy');
 
 });
 
