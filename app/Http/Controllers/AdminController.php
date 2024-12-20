@@ -32,16 +32,27 @@ class AdminController extends BaseController
     {
         $appointmentId = $request->appointment_id;
         $doctorId = $request->doctor_id;
+        $validated = $request->validate([
+            'date' => 'required|date_format:Y-m-d\TH:i',
+        ]);
 
-        DB::table('appointment')
+        $datetime = \Carbon\Carbon::createFromFormat('Y-m-d\TH:i', $validated['date'])->format('Y-m-d H:i:s');
+
+        $updated = DB::table('appointment')
             ->where('id', $appointmentId)
-            ->update(['doctorsid' => $doctorId,
-                        'status' => 'assigned',
-                        'dop' => now()
-                    ]);
+            ->update([
+                'doctorsid' => $doctorId,
+                'status' => 'assigned',
+                'dop' => $datetime
+            ]);
 
-        return redirect()->back()->with(['message' => 'Appointment not found.'], 404);
+        if ($updated) {
+            return response()->json(['message' => 'Doctor assigned successfully.']);
+        } else {
+            return response()->json(['message' => 'Appointment not found.'], 404);
+        }
     }
+
     public function updateDoctor(Request $request)
     {
 
@@ -64,20 +75,12 @@ class AdminController extends BaseController
 
     public function update(Request $request)
     {
-        Log::debug('Received request data:', $request->all());
-
-        
         $validated = $request->validate([
             'doctor_id' => 'required|exists:doctors,id',
             'name' => 'required|string|max:255',
             'specialty' => 'required|string|max:255',
             'status' => 'required|in:active,inactive',
         ]);
-
-        
-        Log::debug('Validated data:', $validated);
-
-        
         $updated = DB::table('doctors')
             ->where('id', $validated['doctor_id'])
             ->update([
@@ -85,10 +88,6 @@ class AdminController extends BaseController
                 'specialty' => $validated['specialty'],
                 'status' => $validated['status'],
             ]);
-
-            
-        Log::debug('Update result:', ['updated' => $updated]);
-
         
         if ($updated) {
             return response()->json(['message' => 'Doctor updated successfully']);
@@ -98,11 +97,12 @@ class AdminController extends BaseController
     }
     public function history()
     {
-        $history = collect(DB::select("SELECT u.name as patientName, d.name as doctorsName, a.dop, a.concern, a.created_at 
+        $history = collect(DB::select("SELECT a.id, u.name as patientName, d.name as doctorsName, a.dop, a.concern, a.created_at, a.status 
         FROM appointment a
         JOIN users u ON a.patientid = u.id
         JOIN doctors d ON a.doctorsid = d.id
-        WHERE a.status = 'assigned' ORDER BY a.dop DESC"));
+        WHERE a.status = 'done' OR a.status = 'canceled'
+        ORDER BY a.dop DESC"));
 
         return view('admin.history', [
             'history' => $history
@@ -138,5 +138,43 @@ class AdminController extends BaseController
         $result = DB::table('doctors')->where('id', $doctor)->delete();
 
         return redirect()->back()->with('success', 'Student deleted successfully');
+    }
+    public function assigned()
+    {
+        $history = collect(DB::select("SELECT a.id, u.name as patientName, d.name as doctorsName, a.dop, a.concern, a.created_at 
+        FROM appointment a
+        JOIN users u ON a.patientid = u.id
+        JOIN doctors d ON a.doctorsid = d.id
+        WHERE a.status = 'assigned' ORDER BY a.dop DESC"));
+
+        return view('admin.assigned', [
+            'history' => $history
+        ]);
+    }
+    public function toDone(Request $request){
+        $appointmentId = $request->appointment_id;
+
+        $updated = DB::table('appointment')
+            ->where('id', $appointmentId)
+            ->update(['status' => 'done']);
+
+        if ($updated) {
+            return response()->json(['message' => 'Appointment status updated to canceled']);
+        } else {
+            return response()->json(['message' => 'Appointment not found.'], 404);
+        }
+    }
+    public function toCanceled(Request $request){
+        $appointmentId = $request->appointment_id;
+
+        $updated = DB::table('appointment')
+            ->where('id', $appointmentId)
+            ->update(['status' => 'canceled']);
+
+        if ($updated) {
+            return response()->json(['message' => 'Appointment status updated to canceled']);
+        } else {
+            return response()->json(['message' => 'Appointment not found.'], 404);
+        }
     }
 }

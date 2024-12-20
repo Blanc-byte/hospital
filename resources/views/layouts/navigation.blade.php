@@ -55,6 +55,10 @@
             {{ __('Appointments') }}
         </a>
 
+        <a href="{{ route('admin.assigned') }}" class="nav-link {{ request()->routeIs('admin.assigned') ? 'active' : '' }}">
+            {{ __('Assigned') }}
+        </a>
+
         <!-- Doctors -->
         <a href="{{ route('admin.doctors') }}" class="nav-link {{ request()->routeIs('admin.doctors') ? 'active' : '' }}">
             {{ __('Doctors') }}

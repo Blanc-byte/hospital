@@ -18,14 +18,18 @@ use Illuminate\Support\Facades\Auth;
 Route::middleware(['auth', 'isAdmin'])->group(function () {
     Route::get('/admin/appointments', [AdminController::class, 'index'])->name('admin.appointments');
     Route::get('/admin/history', [AdminController::class, 'history'])->name('admin.history');
+    Route::get('/admin/assigned', [AdminController::class, 'assigned'])->name('admin.assigned');
     Route::get('/admin/doctors', [AdminController::class, 'doctors'])->name('admin.doctors');
     Route::get('/admin/users', [AdminController::class, 'users'])->name('admin.users');
     Route::post('/assign-doctor', [AdminController::class, 'assignDoctor']);
     Route::post('/update-doctor', [AdminController::class, 'updateDoctor']);
     Route::post('/doctors/update', [AdminController::class, 'update']);
     Route::post('/add-doctor', [AdminController::class, 'store'])->name('doctor.add');
-Route::delete('/doctor/{doctor}', [AdminController::class, 'destroy'])->name('doctor.destroy');
+    Route::delete('/doctor/{doctor}', [AdminController::class, 'destroy'])->name('doctor.destroy');
 
+
+    Route::post('/update-appointment-toDone', [AdminController::class, 'toDone']);
+    Route::post('/update-appointment-toCanceled', [AdminController::class, 'toCanceled']);
 });
 
 Route::middleware(['auth', 'isPatient'])->group(function () {
@@ -33,6 +37,8 @@ Route::middleware(['auth', 'isPatient'])->group(function () {
     Route::post('/appointment', [PatientController::class, 'store'])->name('appointment.store');
     Route::get('/appointment/view', [PatientController::class, 'viewAppointment'])->name('appointment.view');
     Route::get('/appointment/approved', [PatientController::class, 'viewAppointmentApproved'])->name('appointment.approved');
+    Route::post('/update-appCus', [AdminController::class, 'toCanceled']);
+    Route::post('/update-appointment-toCanceled', [AdminController::class, 'toCanceled']);
 });
 
 // Route::get('/patient/appointment', [PatientController::class, 'index'])

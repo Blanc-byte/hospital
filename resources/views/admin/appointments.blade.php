@@ -141,7 +141,6 @@
                         <tr>
                             <td>{{ $doctor->name }}</td>
                             <td>{{ $doctor->specialty }}</td>
-                            {{-- <td>{{ $doctor->total }}</td> --}}
                             <td>
                                 <button type="submit" class="assign-button" onclick="closeConfirmationModal({{ $doctor->id }})">CHOOSE</button>
                                 
@@ -149,12 +148,13 @@
                         </tr>
                     @endif
                     
-                @endforeach
-                
-                                
+                @endforeach   
             </tbody>
+            <div class="mb-4">
+                <label for="datetime" class="block font-semibold mb-2">Select Date and Time:</label>
+                <input type="datetime-local" name="datetime" id="datetime" class="input-field" required>
+            </div>
         </table>
-        
         <button type="submit" class="assign-button2" onclick="CancelConfirmationModal()">CANCEL</button>
     </div>
 </div>
@@ -170,10 +170,22 @@
         document.getElementById('confirmation-modal').style.display = 'none';
     }
     function closeConfirmationModal(doctorid) {
+        // Check if the datetime field is empty
+        
+        const datetimeInput = document.getElementById('datetime').value;
+        if (!datetimeInput) {
+            alert("Please select a date and time.");
+            return;
+        }
+
         document.getElementById('confirmation-modal').classList.add('hidden');
         document.getElementById('confirmation-modal').style.display = 'none';
+
+        
+
         console.log("Appointment ID: " + appID);
         console.log("Doctor ID: " + doctorid);
+        console.log("Selected DateTime: " + datetimeInput);
         fetch(`/assign-doctor`, {
             method: 'POST',
             headers: {
@@ -182,7 +194,8 @@
             },
             body: JSON.stringify({
                 appointment_id: appID,
-                doctor_id: doctorid
+                doctor_id: doctorid,
+                date: datetimeInput
             })
         })
         .then(response => response.json())

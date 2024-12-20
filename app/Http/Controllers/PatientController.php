@@ -35,7 +35,6 @@ class PatientController extends BaseController
         $pendingCount2 = DB::table('appointment')
             ->where('patientid', $patientId)
             ->where('status', 'assigned')
-            ->whereDate('created_at', $today) 
             ->count();
 
         if ($pendingCount < 1) {
@@ -47,7 +46,7 @@ class PatientController extends BaseController
                 ]);
                 return redirect()->back()->with('success', 'Appointment added successfully!');
             }else{
-                return redirect()->back()->with('error', 'You can only request one appointment per day.');
+                return redirect()->back()->with('error', 'You can only request one appointment.');
             }
         } else {
             return redirect()->back()->with('error', 'You can only request one appointment.');
@@ -74,11 +73,25 @@ class PatientController extends BaseController
         $userId = auth()->id(); 
         
         $appointment = collect(DB::select("
-            SELECT d.id AS doctor_id, d.name AS doctor_name, a.doctorsid, a.dop, a.status, a.concern
+            SELECT d.id AS doctor_id, d.name AS doctor_name, a.doctorsid, a.dop, a.status, a.concern, a.id
             FROM appointment a
             JOIN doctors d ON a.doctorsid = d.id
-            WHERE a.status != 'pending' ORDER BY dop DESC"));
+            WHERE a.status != 'pending' and a.status != 'canceled' ORDER BY dop DESC"));
 
         return view('patients.approved', ['appointments' => $appointment]);
+    }
+    public function toCanceled(Request $request){
+
+        $appointmentId = $request->appointment_id;
+
+        $updated = DB::table('appointment')
+            ->where('id', $appointmentId)
+            ->update(['status' => 'canceled']);
+
+        if ($updated) {
+            return response()->json(['message' => 'Appointment status updated to canceled']);
+        } else {
+            return response()->json(['message' => 'Appointment not found.'], 404);
+        }
     }
 }

@@ -99,6 +99,7 @@
                                     <th>Assigned Doctor</th>
                                     <th>Date of Appointment</th>
                                     <th class="concern-cell">Concern</th>
+                                    <th>Status</th>
                                     <th>Created At</th>
                                 </tr>
                             </thead>
@@ -109,6 +110,7 @@
                                         <td>{{ $hty->doctorsName }}</td>
                                         <td>{{ $hty->dop }}</td>
                                         <td class="concern-cell">{{ $hty->concern }}</td>
+                                        <td>{{ $hty->status }}</td>
                                         <td>{{ $hty->created_at }}</td>
                                     </tr>
                                 @endforeach
