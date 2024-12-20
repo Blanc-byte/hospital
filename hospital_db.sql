@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 15, 2024 at 05:20 PM
+-- Generation Time: Dec 20, 2024 at 05:13 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -31,26 +31,11 @@ CREATE TABLE `appointment` (
   `id` int(11) NOT NULL,
   `patientid` int(11) NOT NULL,
   `doctorsid` int(11) DEFAULT NULL,
-  `dop` date DEFAULT NULL,
+  `dop` datetime DEFAULT NULL,
   `status` varchar(254) NOT NULL DEFAULT 'pending',
   `concern` text NOT NULL,
   `created_at` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `appointment`
---
-
-INSERT INTO `appointment` (`id`, `patientid`, `doctorsid`, `dop`, `status`, `concern`, `created_at`) VALUES
-(10, 3, 3, '2024-12-15', 'assigned', 'I have Nosebleed', '2024-12-15 17:18:29'),
-(11, 5, NULL, NULL, 'pending', 'I have not yet piss in 3 days', '2024-12-15 17:56:59'),
-(12, 6, NULL, NULL, 'pending', 'HUHU, my mind is stress', '2024-12-15 17:57:47'),
-(13, 7, NULL, NULL, 'pending', 'My feets been hurting for days', '2024-12-15 17:58:37'),
-(14, 8, NULL, NULL, 'pending', 'My back is itching every night huhu', '2024-12-15 17:59:30'),
-(15, 2, 4, '2024-12-15', 'assigned', 'I only serve master rimuru', '2024-12-15 18:00:35'),
-(16, 4, NULL, NULL, 'pending', 'My wife is always beautiful', '2024-12-15 18:01:32'),
-(17, 3, 5, '2024-12-15', 'assigned', 'asd', '2024-12-15 18:07:54'),
-(19, 3, NULL, NULL, 'pending', 'Hey', '2024-12-15 10:18:22');
 
 -- --------------------------------------------------------
 
@@ -71,10 +56,12 @@ CREATE TABLE `doctors` (
 
 INSERT INTO `doctors` (`id`, `name`, `specialty`, `status`) VALUES
 (1, 'Dr. John Smith', 'Cardiology', 'available'),
-(2, 'Dr. Emily Davis', 'Neurology', 'available'),
+(2, 'Dr. Emily Davis', 'Neurology', 'unavailable'),
 (3, 'Dr. Michael Brown', 'Orthopedics', 'available'),
 (4, 'Dr. Sarah Johnson', 'Pediatrics', 'available'),
-(5, 'Dr. William Wilson', 'Dermatology', 'available');
+(5, 'Dr. William Wilson', 'Dermatology', 'available'),
+(6, 'Dr. John Bagcal', 'Brain Analysis', 'available'),
+(8, 'Dr. Janglen', 'Cod', 'unavailable');
 
 -- --------------------------------------------------------
 
@@ -235,13 +222,13 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `appointment`
 --
 ALTER TABLE `appointment`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- AUTO_INCREMENT for table `doctors`
 --
 ALTER TABLE `doctors`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `failed_jobs`
